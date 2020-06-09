@@ -1,0 +1,153 @@
+---
+output:
+  html_notebook: default
+  html_document: default
+---
+```{r}
+library(rollRegres)
+library(ggpubr)
+```
+Data Input: price_calulations.csv & volume_calculations.csv + calculated hourly returns, reshaped y1,y2,y3 values.
+```{r}
+price_data_input <- "price_returns.csv"
+volume_data_input <- "volume_returns.csv"
+
+price_data <- read.csv(price_data_input)
+volume_data <- read.csv(volume_data_input)
+```
+Create dataframes for storing predicted returns to compare to real returns.
+```{r}
+predicted_price_return <- data.frame(price_data['timestamp'])
+predicted_price_return['real_return'] <- price_data['return']
+
+predicted_volume_return <- data.frame(volume_data['timestamp'])
+predicted_volume_return['real_return'] <- volume_data['return']
+```
+PRICE RETURN REGRESSIONS
+
+Rolling Regression: Price returns on y1 
+Regression period of ~425 days = 10200 hours
+Predict returns on reshaped y1
+```{r}
+price_mdl_y1 <- roll_regres(return ~ y1, price_data, width = 10200L)
+price_mdl_y1_intercepts <- price_mdl_y1$coefs[,1]
+price_mdl_y1_coefs <-price_mdl_y1$coefs[,2]
+
+predicted_price_return['return_y1'] <- price_mdl_y1_intercepts + price_mdl_y1_coefs*price_data['reshaped.y1']
+```
+Price returns on y1: Pearson correlation test
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y1'], method = 'pearson')
+```
+Price returns on y1: Kendall rank correlation test
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y1'], method = 'kendall')
+```
+Price returns on y1: Spearman rank correlation coefficient
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y1'], method = 'spearman')
+```
+
+Rolling Regression: Price returns on y2
+```{r}
+price_mdl_y2 <- roll_regres(return ~ y2, price_data, width = 10200L)
+price_mdl_y2_intercepts <- price_mdl_y2$coefs[,1]
+price_mdl_y2_coefs <-price_mdl_y2$coefs[,2]
+
+predicted_price_return['return_y2'] <- price_mdl_y2_intercepts + price_mdl_y2_coefs*price_data['reshaped.y2']
+```
+Price returns on y2: Pearson correlation test
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y2'], method = 'pearson')
+```
+Price returns on y2: Kendall rank correlation test
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y2'], method = 'kendall')
+```
+Price returns on y2: Spearman rank correlation coefficient
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y2'], method = 'spearman')
+```
+
+Rolling Regression: Price returns on y3
+```{r}
+price_mdl_y3 <- roll_regres(return ~ y3, price_data, width = 10200L)
+price_mdl_y3_intercepts <- price_mdl_y3$coefs[,1]
+price_mdl_y3_coefs <-price_mdl_y3$coefs[,2]
+
+predicted_price_return['return_y3'] <- price_mdl_y3_intercepts + price_mdl_y3_coefs*price_data['reshaped.y3']
+```
+Price returns on y3: Pearson correlation test
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y3'], method = 'pearson')
+```
+Price returns on y3: Kendall rank correlation test
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y3'], method = 'kendall')
+```
+Price returns on y3: Spearman rank correlation coefficient
+```{r}
+cor.test(predicted_price_return[,'real_return'], predicted_price_return[,'return_y3'], method = 'spearman')
+```
+VOLUME RETURN REGRESSIONS
+
+Rolling Regression: Volume returns on y1 
+```{r}
+volume_mdl_y1 <- roll_regres(return ~ y1, volume_data, width = 10200L)
+volume_mdl_y1_intercepts <- volume_mdl_y1$coefs[,1]
+volume_mdl_y1_coefs <-volume_mdl_y1$coefs[,2]
+
+predicted_volume_return['return_y1'] <- volume_mdl_y1_intercepts + volume_mdl_y1_coefs*volume_data['reshaped.y1']
+```
+Volume returns on y1: Pearson correlation test
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y1'], method = 'pearson')
+```
+Volume returns on y1: Kendall rank correlation test
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y1'], method = 'kendall')
+```
+Volume returns on y1: Spearman rank correlation coefficient
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y1'], method = 'spearman')
+```
+Rolling Regression: Volume returns on y2
+```{r}
+volume_mdl_y2 <- roll_regres(return ~ y2, volume_data, width = 10200L)
+volume_mdl_y2_intercepts <- volume_mdl_y2$coefs[,1]
+volume_mdl_y2_coefs <-volume_mdl_y2$coefs[,2]
+
+predicted_volume_return['return_y2'] <- volume_mdl_y2_intercepts + volume_mdl_y2_coefs*volume_data['reshaped.y2']
+```
+Volume returns on y2: Pearson correlation test
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y2'], method = 'pearson')
+```
+Volume returns on y2: Kendall rank correlation test
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y2'], method = 'kendall')
+```
+Volume returns on y2: Spearman rank correlation coefficient
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y2'], method = 'spearman')
+```
+Rolling Regression: Volume returns on y3
+```{r}
+volume_mdl_y3 <- roll_regres(return ~ y3, volume_data, width = 10200L)
+volume_mdl_y3_intercepts <- volume_mdl_y3$coefs[,1]
+volume_mdl_y3_coefs <-volume_mdl_y3$coefs[,2]
+
+predicted_volume_return['return_y3'] <- volume_mdl_y3_intercepts + volume_mdl_y3_coefs*volume_data['reshaped.y3']
+```
+Volume returns on y3: Pearson correlation test
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y3'], method = 'pearson')
+```
+Volume returns on y3: Kendall rank correlation test
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y3'], method = 'kendall')
+```
+Volume returns on y3: Spearman rank correlation coefficient
+```{r}
+cor.test(predicted_volume_return[,'real_return'], predicted_volume_return[,'return_y3'], method = 'spearman')
+```
